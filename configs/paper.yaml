@@ -1,0 +1,162 @@
+# Setup of the companion study.
+run_name: paper_pipeline
+output_dir: synthetic_runs/paper_pipeline
+models:
+  - name: nvidia/Llama-3.1-Nemotron-70B-Instruct-HF
+    run_name: llama31_nemotron_70b
+    random_seed: 101
+    base_url: http://localhost:8000/v1
+    serve:
+      require_launch: true
+      port: 8000
+      tensor_parallel_size: 2
+      dtype: bfloat16
+      gpu_memory_utilization: 0.9
+      cuda_visible_devices: "0,1"
+      log_file: synthetic_runs/logs/llama31_nemotron_70b_vllm.log
+  - name: meta-llama/Meta-Llama-3.1-70B-Instruct
+    run_name: llama31_70b
+    random_seed: 102
+    base_url: http://localhost:8000/v1
+    serve:
+      require_launch: true
+      port: 8000
+      tensor_parallel_size: 2
+      dtype: bfloat16
+      gpu_memory_utilization: 0.9
+      cuda_visible_devices: "0,1"
+      log_file: synthetic_runs/logs/llama31_70b_vllm.log
+  - name: Qwen/Qwen2.5-72B-Instruct
+    run_name: qwen25_72b
+    random_seed: 103
+    base_url: http://localhost:8000/v1
+    serve:
+      require_launch: true
+      port: 8000
+      tensor_parallel_size: 2
+      dtype: bfloat16
+      gpu_memory_utilization: 0.9
+      cuda_visible_devices: "0,1"
+      log_file: synthetic_runs/logs/qwen25_72b_vllm.log
+  - name: mistralai/Mistral-Small-Instruct-2409
+    run_name: mistral_small_instruct_2409
+    random_seed: 104
+    base_url: http://localhost:8000/v1
+    serve:
+      require_launch: true
+      port: 8000
+      tensor_parallel_size: 2
+      dtype: bfloat16
+      gpu_memory_utilization: 0.9
+      cuda_visible_devices: "0,1"
+      log_file: synthetic_runs/logs/mistral_small_instruct_2409_vllm.log
+  - name: google/gemma-2-27b-it
+    run_name: gemma2_27b_it
+    random_seed: 105
+    base_url: http://localhost:8000/v1
+    serve:
+      require_launch: true
+      port: 8000
+      tensor_parallel_size: 1
+      dtype: bfloat16
+      gpu_memory_utilization: 0.9
+      cuda_visible_devices: "0"
+      attention_backend: FLASHINFER
+      log_file: synthetic_runs/logs/gemma2_27b_it_vllm.log
+  - name: Qwen/Qwen2.5-32B-Instruct
+    run_name: qwen25_32b
+    random_seed: 106
+    base_url: http://localhost:8000/v1
+    serve:
+      require_launch: true
+      port: 8000
+      tensor_parallel_size: 1
+      dtype: bfloat16
+      gpu_memory_utilization: 0.9
+      cuda_visible_devices: "0"
+      log_file: synthetic_runs/logs/qwen25_32b_vllm.log
+evaluators:
+  - name: nvidia/Llama-3.1-Nemotron-70B-Instruct-HF
+    base_url: http://localhost:8000/v1
+    serve:
+      require_launch: true
+      port: 8000
+      tensor_parallel_size: 2
+      dtype: bfloat16
+      gpu_memory_utilization: 0.9
+      cuda_visible_devices: "0,1"
+      log_file: synthetic_runs/logs/llama31_nemotron_70b_eval_vllm.log
+  - name: meta-llama/Meta-Llama-3.1-70B-Instruct
+    base_url: http://localhost:8000/v1
+    serve:
+      require_launch: true
+      port: 8000
+      tensor_parallel_size: 2
+      dtype: bfloat16
+      gpu_memory_utilization: 0.9
+      cuda_visible_devices: "0,1"
+      log_file: synthetic_runs/logs/llama31_70b_eval_vllm.log
+  - name: Qwen/Qwen2.5-72B-Instruct
+    base_url: http://localhost:8000/v1
+    serve:
+      require_launch: true
+      port: 8000
+      tensor_parallel_size: 2
+      dtype: bfloat16
+      gpu_memory_utilization: 0.9
+      cuda_visible_devices: "0,1"
+      log_file: synthetic_runs/logs/qwen25_72b_eval_vllm.log
+  - name: mistralai/Mistral-Small-Instruct-2409
+    base_url: http://localhost:8000/v1
+    serve:
+      require_launch: true
+      port: 8000
+      tensor_parallel_size: 2
+      dtype: bfloat16
+      gpu_memory_utilization: 0.9
+      cuda_visible_devices: "0,1"
+      log_file: synthetic_runs/logs/mistral_small_instruct_2409_eval_vllm.log
+  - name: google/gemma-2-27b-it
+    base_url: http://localhost:8000/v1
+    serve:
+      require_launch: true
+      port: 8000
+      tensor_parallel_size: 1
+      dtype: bfloat16
+      gpu_memory_utilization: 0.9
+      cuda_visible_devices: "0"
+      attention_backend: FLASHINFER
+      log_file: synthetic_runs/logs/gemma2_27b_it_eval_vllm.log
+  - name: Qwen/Qwen2.5-32B-Instruct
+    base_url: http://localhost:8000/v1
+    serve:
+      require_launch: true
+      port: 8000
+      tensor_parallel_size: 1
+      dtype: bfloat16
+      gpu_memory_utilization: 0.9
+      cuda_visible_devices: "0"
+      log_file: synthetic_runs/logs/qwen25_32b_eval_vllm.log
+generation:
+  num_examples: 5000
+  workers: 5
+  temperature: 0.7
+  max_tokens: 2048
+  random_seed: 42
+  # the study drew language and bug type independently
+  sampling: uniform
+validation:
+  # the study neither retried nor filtered generations
+  max_retries: 0
+  min_code_lines: 0
+  require_difference: false
+evaluation:
+  enabled: true
+  temperature: 0.2
+  max_output_tokens: 512
+  workers: 5
+  max_retries: 2
+  random_seed: 42
+selection:
+  threshold: 8.5
+  weight_config: balanced

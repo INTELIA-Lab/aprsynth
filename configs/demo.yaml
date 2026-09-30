@@ -1,0 +1,23 @@
+run_name: demo
+output_dir: synthetic_runs/demo
+models:
+  - name: Qwen/Qwen2.5-32B-Instruct
+    base_url: http://localhost:8000/v1
+    serve:
+      require_launch: true
+      port: 8000
+      tensor_parallel_size: 1
+generation:
+  num_examples: 100
+  workers: 5
+  temperature: 0.7
+  random_seed: 42
+evaluators:
+  - name: Qwen/Qwen2.5-32B-Instruct
+    base_url: http://localhost:8000/v1
+    serve:
+      require_launch: true
+      port: 8000
+selection:
+  threshold: 8.5
+  weight_config: balanced

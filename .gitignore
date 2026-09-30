@@ -1,0 +1,27 @@
+# Python caches and bytecode
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Virtual environments and local env files
+.venv/
+venv/
+.env
+
+# Build/package artifacts
+build/
+dist/
+*.egg-info/
+
+# Generated runs and logs
+synthetic_runs/
+logs/
+*.log
+
+# IDEs and OS files
+.idea/
+.vscode/
+*.swp
+.DS_Store

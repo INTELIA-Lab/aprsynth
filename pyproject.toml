@@ -1,0 +1,30 @@
+[project]
+name = "aprsynth"
+version = "1.0.0"
+authors = [
+    { name = "David de-Fitero-Dominguez", email = "david.fitero@uah.es" }
+]
+license = "Apache-2.0"
+requires-python = ">=3.10"
+dependencies = [
+    "pydantic>=2.13.4",
+    "pyyaml>=6.0.3",
+    "requests>=2.33.1",
+    "tqdm>=4.67.1",
+]
+
+[project.scripts]
+aprsynth = "aprsynth.cli:main"
+
+[project.optional-dependencies]
+serve = [
+    "vllm>=0.20.1",
+]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+packages = ["aprsynth"]
